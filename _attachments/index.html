@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<html>
+<head>
+    <title>OGD Wien Preview and Matcher</title>
+    <link rel="stylesheet" href="style/main.css" type="text/css">
+    <link type="text/css" href="style/smoothness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="titel">
+      <h1>OGD Wien Preview and Matcher</h1>
+      Version 1.0
+    </div>
+    
+    <div id="sidebar" style="height:100%;">
+      <!-- <div id="accordion"> -->
+      <div>
+        <div>
+          <h3><b><a>Verfügbare OGD Daten:</a></b></h3>
+          <div id="radio_ogddata">
+            Lade Datensatz vom OGD Wien Server ...
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="content">
+      <div class="tabs" style="width:99%;" id="tabs-tab">
+        <ul>
+          <li><a href="#map-tab">Karte</a></li>
+          <li><a href="#info-tab">Info</a></li>
+        </ul>
+        <div id="map-tab" style="width:97%;">
+          <div alt="Map is loading ..." id="map" style="width:100%;height:1px;"></div>
+          <div id="infobar">
+            <div id="infobar_text"></div>
+            <div id="processmonitor">
+              <!-- <div id="processmonitor_title"></div> -->
+              <div id="processmonitor_process"></div>
+              <div id="processmonitor_process_bar"></div>
+            </div>
+          </div>
+        </div>
+        <div id="info-tab" style="width:97%;">
+          <p><b>Über das Programm</b></p>
+          <p>Der Hauptzweck dieser Web-App besteht im schnellen Anzeigen der OGD Wien Daten als Overlay über der OpenStreetMap. Bei einer großen Menge an Punkten werden diese zu einem einzelnen größeren Punkt zusammengefasst.
+          Die Liste dieser Datensätze wird automatisch aus allen aktuell tatsächlich vorhandenen Datenlayern generiert und repräsentiert immer den aktuellen Stand.</p>
+          <p><b>Matching</b></p>
+          <p>Falls Punktdaten visualisiert werden besteht die Möglichkeit, diese automatisch mit OpenStreetMap Daten zu vergleichen.
+          Relationen werden (noch) nicht beachtet.
+          Die Geschwindigkeit des Matchings ist limitiert durch die Geschwindigkeit des Servers, welcher in diesem Fall ein sehr langsamer Raspberry PI ist.</p>
+          <p><b>Kontakt</b></p>
+          <p>Markus Mayr ( ScubbX ), markusmayr( at )gmx.net</p>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <div id="dialog_matchproperties" title="Matching Eigenschaften">
+    <p>
+      <b>Suchradius: <input id="input_radius" type="number" style="width:80px;" min="0.00001" max="0.02" step="0.00001" value="0.0009"></b>
+      <i>(Dezimal-Grad)</i>
+    </p>
+    <p>
+      <b>OSM Kategorie:</b> <input id="input_key" type="text" style="width:100px;" value="amenity" placeholder="key"> = <input value="hospital" id="input_value" type="text" style="width:100px;" placeholder="value">
+      <i>('*' für alle Werte)</i>
+      <br/>Der ausgewählte Datensatz muss mit einer Kategorie der OSM-Daten übereinstimmen. Diese Kategorie kann hier definiert werden.
+    </p>
+  </div>
+
+  <div id="dialog_welcome" title="OGD Vienna Previewer & Matcher">
+    <p>
+      <b>Willkommen!</b>
+    </p>
+    <p>
+      Diese Web-Applikation listet alle von der Stadt Wien als OpenGovernmentData freigegebenen Geodatensätze und zeigt diese bei Bedarf auf einer Karte an (mit Ausnahme des Geländemodells).
+      Die Liste dieser Datensätze wird automatisch aus allen aktuell tatsächlich vorhandenen Datenlayern generiert.
+      Auch die einzelnen Datensätze werden erst bei Aktivierung aktiv vom OGD Vienna Server geladen und stellen daher die aktuellste Version dar.
+    </p>
+    <p>
+      <b>Performance</b>
+    </p>
+    <p>
+      Wenn große Datensätze geladen werden kann die Bedienung träge werden.
+    </p>
+    <p>
+      <b>Matching</b>
+    </p>
+    <p>
+      Falls ein Datensatz des Types "<i>Point</i>" ausgewählt wurde, kann ein Vergleich mit der OpenStreetMap Datenbank durchgeführt werden.
+    </p>
+  </div>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35804505-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  <script src="/_utils/script/sha1.js"></script>
+  <script src="/_utils/script/json2.js"></script>
+  <script src="/_utils/script/jquery.js"></script>
+  <script src="/_utils/script/jquery.couch.js"></script>
+  <script src="vendor/couchapp/jquery.couchLogin.js"></script>
+  <script src="vendor/couchapp/jquery.couchProfile.js"></script>
+  <script src="vendor/couchapp/md5.js"></script>
+  <script src="vendor/couchapp/jquery.mustache.js"></script>
+  
+  <script type="text/javascript" src="vendor/couchapp/jquery-ui-1.8.23.custom.min.js"></script>
+  <script type="text/javascript" src="vendor/couchapp/OpenLayers.js"></script>
+
+  
+  <script type="text/javascript" src="script/logic.js"></script>
+  <script type="text/javascript" src="script/map.js"></script>
+  
+  <script type="text/javascript" src="mod_m_simple2/mod_m_simple2.js"></script>
+  <!-- <script type="text/javascript" src="mod_ogd/mod_ogd.js"></script> -->
+  <script src="vendor/couchapp/xml2json.js"></script>
+  
+  
+</html>
